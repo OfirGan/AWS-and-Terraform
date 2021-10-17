@@ -15,9 +15,9 @@ variable "availability_zone" {
   default = "us-east-1a"
 }
 
-variable "instance_count" {
-  default = 2
-}
+#variable "instance_count" {
+#  default = 2
+#}
 
 variable "server_name_tag" {
   default = "nginx_webserver"

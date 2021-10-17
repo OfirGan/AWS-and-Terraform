@@ -35,4 +35,3 @@ terraform.rc
 
 # Ignore Additional files
 *.lock.*
-*.txt
