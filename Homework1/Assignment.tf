@@ -14,13 +14,16 @@ variable "region" {
 variable "availability_zone" {
   default = "us-east-1a"
 }
+variable "instance_type" {
+  default = "t3.micro"
+}
 
-#variable "instance_count" {
-#  default = 2
-#}
+variable "instance_count" {
+  default = 2
+}
 
 variable "server_name_tag" {
-  default = "nginx_webserver"
+  default = "nginx_web_srv"
 }
 
 variable "owner_tag" {
@@ -66,71 +69,88 @@ resource "aws_default_vpc" "default" {
 
 }
 
-# Allow HTTP Inbound
-resource "aws_security_group" "allow_http_any_inbound" {
-  name   = "allow_http_any_inbound"
+resource "aws_security_group" "nginx_web_server_security_group" {
+  name   = "nginx_web_server_security_group"
   vpc_id = aws_default_vpc.default.id
+
+  # Allow All HTTP Inbound
   ingress {
     cidr_blocks = ["0.0.0.0/0"]
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
   }
-}
 
-# Allow SSH Inbound
-resource "aws_security_group" "allow_ssh_any_inbound" {
-  name   = "allow_ssh_any_inbound"
-  vpc_id = aws_default_vpc.default.id
-  ingress {
+  # Allow All SSH Inbound
+  ingress { # Allow SSH Inbound
     cidr_blocks = ["0.0.0.0/0"]
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
   }
-}
 
-# Allow Any Outbound
-resource "aws_security_group" "allow_any_outbound" {
-  name   = "allow_any_outbound"
-  vpc_id = aws_default_vpc.default.id
+  # Allow All Any Outbound
   egress {
+    cidr_blocks = ["0.0.0.0/0"]
     from_port   = 0
     to_port     = 0
     protocol    = -1
-    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
-resource "aws_instance" "nginx_web" {
+resource "aws_instance" "nginx_web_srv" {
+  count                  = var.instance_count
   ami                    = data.aws_ami.ami_ubuntu_1804_latest.id
-  instance_type          = "t2.micro"
+  instance_type          = var.instance_type
   key_name               = var.key_name
   availability_zone      = var.availability_zone
-  vpc_security_group_ids = [aws_security_group.allow_http_any_inbound.id, aws_security_group.allow_ssh_any_inbound.id, aws_security_group.allow_any_outbound.id]
+  vpc_security_group_ids = [aws_security_group.nginx_web_server_security_group.id]
 
   connection {
     type        = "ssh"
     host        = self.public_ip
     user        = "ubuntu"
     private_key = file(var.private_key_path)
-
   }
 
   provisioner "remote-exec" {
     inline = [
       "sudo apt update",
       "sudo apt install nginx -y",
+      "sudo chmod 777 /var/www/html/index.nginx-debian.html",
+      "sudo echo \"Welcome to Grandpa's Whiskey\" > /var/www/html/index.nginx-debian.html",
       "sudo service nginx start"
     ]
-
   }
 
   tags = {
-    Name    = var.server_name_tag
+    Name    = "${var.server_name_tag}-${count.index + 1}"
     Owner   = var.owner_tag
     Purpose = var.purpose_tag
   }
+}
+
+# Create encrypted EBS Volume
+resource "aws_ebs_volume" "ebs_vols" {
+  count             = var.instance_count
+  availability_zone = var.availability_zone
+  size              = 10
+  encrypted         = true
+  type              = "gp2"
+
+  tags = {
+    Name    = "${var.server_name_tag}-${count.index + 1}-ebs-volume"
+    Owner   = var.owner_tag
+    Purpose = var.purpose_tag
+  }
+}
+
+# Assign each EBS Volume to an EC2 instance
+resource "aws_volume_attachment" "attach_ebs_vols" {
+  count       = var.instance_count
+  device_name = "/dev/sdh"
+  volume_id   = element(aws_ebs_volume.ebs_vols.*.id, count.index)
+  instance_id = element(aws_instance.nginx_web_srv.*.id, count.index)
 }
 
 ##################################################################################
@@ -138,5 +158,5 @@ resource "aws_instance" "nginx_web" {
 ##################################################################################
 
 output "aws_instance_public_dns" {
-  value = aws_instance.nginx_web.public_dns
+  value = aws_instance.nginx_web_srv.*.public_dns
 }
