@@ -1,0 +1,6 @@
+cd .\Assignments\AWS-and-Terraform\Homework2\
+terraform init
+terraform validate
+terraform plan -out Assignment_plan.tfplan
+terraform apply "Assignment_plan.tfplan"
+terraform destroy
