@@ -11,19 +11,21 @@ variable "region" {
   default = "us-east-1"
 }
 
-variable "availability_zone" {
+variable "availability_zones" {
   type = map(string)
   default = {
-    "private" = "us-east-1a"
-    "public"  = "us-east-1b"
+    "1a" = "us-east-1a"
+    "1b" = "us-east-1b"
   }
 }
 
 variable "subnet_cidr" {
   type = map(string)
   default = {
-    "private" = "10.0.1.0/24"
-    "public"  = "10.0.2.0/24"
+    "private-1a" = "10.0.1.0/24"
+    "private-1b" = "10.0.2.0/24"
+    "public-1a"  = "10.0.3.0/24"
+    "public-1b"  = "10.0.4.0/24"
   }
 }
 
@@ -32,22 +34,6 @@ variable "instance_type" {
   default = {
     "web" = "t2.micro"
     "db"  = "t2.micro"
-  }
-}
-
-variable "instance_count" {
-  type = map(number)
-  default = {
-    "web" = 2
-    "db"  = 2
-  }
-}
-
-variable "server_name_tag" {
-  type = map(string)
-  default = {
-    "web" = "nginx_web_srv"
-    "db"  = "db_srv"
   }
 }
 
