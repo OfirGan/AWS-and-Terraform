@@ -35,3 +35,6 @@ terraform.rc
 
 # Ignore Additional files
 *.lock.*
+
+# Ignore Folder
+\test
