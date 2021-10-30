@@ -3,9 +3,10 @@
 ##################################################################################
 
 resource "aws_network_interface" "db_network_interfaces" {
-  count           = var.instance_count
-  subnet_id       = var.private_subnets_ids[count.index % length(var.private_subnets_ids)]
-  security_groups = [aws_security_group.allow_any_all_out_sg.id, aws_security_group.allow_any_ssh_in_sg.id]
+  count     = var.instance_count
+  subnet_id = var.private_subnets_ids[count.index % length(var.private_subnets_ids)]
+  # To Allow SSH Connection Through Bastion Host add -> , aws_security_group.allow_any_ssh_in_sg.id
+  security_groups = [aws_security_group.allow_any_all_out_sg.id]
 
   tags = {
     Name = "${var.purpose_tag}-network-interface-db-${count.index + 1}"

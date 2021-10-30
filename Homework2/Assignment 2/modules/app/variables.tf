@@ -13,6 +13,13 @@ variable "owner_tag" {
   type        = string
 }
 
+
+variable "s3_logs_bucket_name" {
+  description = "Logs Bucket Name"
+  type        = string
+  default     = "logs-bucket"
+}
+
 variable "public_subnets_ids" {
   description = "Public Subnet Ids"
   type        = list(string)
