@@ -6,6 +6,6 @@ output "web_servers_public_ips" {
   value = module.app.web_servers_public_ips
 }
 
-# output "alb_public_dns" {
-#   value = module.app.alb_public_dns
-# }
+output "alb_public_dns" {
+  value = module.app.alb_public_dns
+}

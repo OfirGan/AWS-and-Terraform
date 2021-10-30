@@ -13,11 +13,14 @@ variable "owner_tag" {
   type        = string
 }
 
+variable "s3_bucket_region_name" {
+  type = string
+}
 
 variable "s3_logs_bucket_name" {
-  description = "Logs Bucket Name"
+  description = "Logs Bucket Name (lowercase only, no spaces)"
   type        = string
-  default     = "logs-bucket"
+  default     = "web-servers-logs-bucket"
 }
 
 variable "public_subnets_ids" {

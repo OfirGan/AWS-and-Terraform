@@ -22,8 +22,8 @@ EOF
 }
 
 resource "aws_iam_instance_profile" "web_instance_profile" {
-  name  = "web_instance_profile"
-  roles = ["web_iam_role"]
+  name = "web_instance_profile"
+  role = "web_iam_role"
 }
 
 resource "aws_iam_role_policy" "web_iam_role_policy" {
@@ -36,7 +36,7 @@ resource "aws_iam_role_policy" "web_iam_role_policy" {
     {
       "Effect": "Allow",
       "Action": ["s3:ListBucket"],
-      "Resource": ["arn:aws:s3:::${var.purpose_tag}-${var.s3_logs_bucket_name}"]
+      "Resource": ["arn:aws:s3:::*"]
     },
     {
       "Effect": "Allow",
@@ -45,7 +45,7 @@ resource "aws_iam_role_policy" "web_iam_role_policy" {
         "s3:GetObject",
         "s3:DeleteObject"
       ],
-      "Resource": ["arn:aws:s3:::${var.purpose_tag}-${var.s3_logs_bucket_name}/*"]
+      "Resource": ["arn:aws:s3:::*"]
     }
   ]
 }
