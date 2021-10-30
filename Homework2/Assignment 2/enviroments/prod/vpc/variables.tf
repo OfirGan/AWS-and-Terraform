@@ -14,12 +14,12 @@ variable "vpc_cidr" {
 
 variable "availability_zones_count" {
   type    = number
-  default = 2
+  default = 1
 }
 
 variable "instance_count" {
   type    = number
-  default = 2
+  default = 1
 }
 
 variable "instance_type" {
