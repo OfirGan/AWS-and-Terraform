@@ -6,7 +6,7 @@ module "vpc" {
   source                   = "..\\..\\..\\modules\\vpc\\"
   purpose_tag              = var.purpose_tag
   vpc_cidr                 = var.vpc_cidr
-  availability_zones_count = 2
+  availability_zones_count = var.availability_zones_count
 }
 
 ##################################################################################

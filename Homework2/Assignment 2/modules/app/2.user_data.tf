@@ -9,6 +9,5 @@ service nginx restart
 EOF
 }
 
-
-#echo "0 */3 * * * root aws s3 cp /var/log/nginx/access.log  s3://$HOSTNAME-access.log" | sudo tee -a /etc/crontab
-#echo -n "0 */3 * * * root aws s3 cp /var/log/nginx/access.log  s3://$HOSTNAME-access.log" >> /etc/crontab
+# Upload Access Log To S3 Now + Every Hour
+# echo "0 * * * * root aws s3 cp /var/log/nginx/access.log  s3://$HOSTNAME-access.log" | sudo tee -a /etc/crontab
