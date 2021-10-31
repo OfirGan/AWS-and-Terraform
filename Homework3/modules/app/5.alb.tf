@@ -7,11 +7,11 @@ resource "aws_lb" "web_alb" {
 
   enable_deletion_protection = false
 
-  #   access_logs {
-  #     bucket  = aws_s3_bucket.lb_logs.bucket
-  #     prefix  = "test-lb"
-  #     enabled = true
-  #   }
+  # access_logs {
+  #   bucket  = "${var.s3_logs_bucket_name}"
+  #   prefix  = "${var.s3_logs_folder}/alb-logs/alb.access_logs"
+  #   enabled = true
+  # }
 
   tags = {
     Name = "${var.purpose_tag}-web-alb"

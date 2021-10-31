@@ -39,3 +39,13 @@ variable "purpose_tag" {
   type    = string
   default = "Whiskey"
 }
+
+variable "s3_logs_bucket_name" {
+  type    = string
+  default = "ofirgan-ops-bucket"
+}
+
+variable "s3_logs_folder" {
+  type    = string
+  default = "hw3"
+}

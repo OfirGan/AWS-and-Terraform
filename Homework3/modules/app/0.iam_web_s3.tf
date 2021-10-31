@@ -36,7 +36,7 @@ resource "aws_iam_role_policy" "web_iam_role_policy" {
     {
       "Effect": "Allow",
       "Action": ["s3:ListBucket"],
-      "Resource": ["arn:aws:s3:::*"]
+      "Resource": ["arn:aws:s3:::${var.s3_logs_bucket_name}/${var.s3_logs_folder}/webserverlogs"]
     },
     {
       "Effect": "Allow",
@@ -45,7 +45,7 @@ resource "aws_iam_role_policy" "web_iam_role_policy" {
         "s3:GetObject",
         "s3:DeleteObject"
       ],
-      "Resource": ["arn:aws:s3:::*"]
+      "Resource": ["arn:aws:s3:::${var.s3_logs_bucket_name}/${var.s3_logs_folder}/webserverlogs/*"]
     }
   ]
 }

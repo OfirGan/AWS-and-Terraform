@@ -12,7 +12,7 @@ sed -i '15,23d' /var/www/html/index.nginx-debian.html
 service nginx restart
 
 ########## Upload Access Log To S3 Now & Every Hour ##########
-echo "0 * * * * root aws s3 cp /var/log/nginx/access.log  s3://${var.purpose_tag}-${var.s3_logs_bucket_name}/$HOSTNAME-access.log" | tr [:upper:] [:lower:] | sudo tee -a /etc/crontab
+echo "0 * * * * root aws s3 cp /var/log/nginx/access.log  s3://${var.s3_logs_bucket_name}/${var.s3_logs_folder}/webserverlogs/$HOSTNAME-access.log" | tr [:upper:] [:lower:] | sudo tee -a /etc/crontab
 
 EOF
 }

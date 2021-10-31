@@ -1,0 +1,4 @@
+
+terraform init -reconfigure (because tfstase deleted from s3 bucket)
+terraform plan -out Assignment_plan.tfplan
+terraform apply Assignment_plan.tfplan
