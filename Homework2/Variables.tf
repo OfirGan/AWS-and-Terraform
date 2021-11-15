@@ -2,10 +2,12 @@
 # VARIABLES
 ##################################################################################
 
-variable "aws_access_key" {}
-variable "aws_secret_key" {}
-variable "private_key_path" {}
-variable "key_name" {}
+variable "private_key_path" {
+  ddefault = "C:\\Downloads\\OpsSchool\\Private-Keys\\ec2-key-pair.pem"
+}
+variable "key_name" {
+  default = "ec2-key-pair"
+}
 
 variable "region" {
   default = "us-east-1"
