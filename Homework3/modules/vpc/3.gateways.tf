@@ -20,7 +20,7 @@ resource "aws_internet_gateway" "internet_gateway" {
 resource "aws_eip" "internet_nat_gateway_eips" {
   count = length(aws_subnet.public_subnets[*].id)
   tags = {
-    Name = "${var.purpose_tag}-eip-internet-nat-gateway-${count.index}"
+    Name = "${var.purpose_tag}-eip-internet-nat-gateway-${count.index + 1}"
   }
 
   # EIP may require IGW to exist prior to association. 
@@ -34,7 +34,7 @@ resource "aws_nat_gateway" "internet_nat_gateways" {
   subnet_id     = aws_subnet.public_subnets[count.index].id
 
   tags = {
-    Name = "${var.purpose_tag}-internet-nat-gateway-${count.index}"
+    Name = "${var.purpose_tag}-internet-nat-gateway-${count.index + 1}"
   }
 
   # To ensure proper ordering, it is recommended to add an explicit dependency
