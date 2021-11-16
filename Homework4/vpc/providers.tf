@@ -3,7 +3,7 @@
 ##################################################################################
 
 terraform {
-  required_version = "1.0.9"
+  required_version = "1.0.11"
 
   backend "remote" {
     organization = "OpsSchool-OfirGan"
@@ -16,7 +16,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "3.63.0"
+      version = "3.65.0"
     }
   }
 }
