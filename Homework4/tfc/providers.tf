@@ -5,20 +5,10 @@
 terraform {
   required_version = "1.0.11"
 
-  backend "remote" {
-    organization = "OpsSchool-OfirGan"
-
-    workspaces {
-      name = "vpc-workspace"
-    }
-  }
-
   required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "3.65.0"
+    tfe = {
+      source  = "hashicorp/tfe"
+      version = "0.26.1"
     }
   }
 }
-
-provider "aws" {}

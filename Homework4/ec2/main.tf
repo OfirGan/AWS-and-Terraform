@@ -26,8 +26,9 @@ module "ec2" {
   public_subnets_ids   = data.terraform_remote_state.vpc.outputs.public_subnets_ids
   private_subnets_ids  = data.terraform_remote_state.vpc.outputs.private_subnets_ids
   instance_count       = var.instance_count
-  instance_type_web    = var.instance_type["web"]
-  instance_type_db     = var.instance_type["db"]
+  instance_type_web    = var.instance_type
+  instance_type_db     = var.instance_type
+  key_name             = aws_ec2_key_pair_name
   purpose_tag          = var.purpose_tag
   owner_tag            = var.owner_tag
 }
