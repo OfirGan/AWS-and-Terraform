@@ -2,14 +2,8 @@
 # VARIABLES
 ##################################################################################
 
-variable "region_name" {
-  type    = string
-  default = "us-east-1"
-}
-
-variable "vpc_cidr" {
-  type    = string
-  default = "10.0.0.0/16"
+variable "aws_ec2_key_pair_name" {
+  type = string
 }
 
 variable "instance_count" {
@@ -18,29 +12,23 @@ variable "instance_count" {
 }
 
 variable "instance_type" {
-  type = map(string)
-  default = {
-    "web" = "t2.micro"
-    "db"  = "t2.micro"
-  }
-}
-
-variable "owner_tag" {
   type    = string
-  default = "Ofir"
-}
-
-variable "purpose_tag" {
-  type    = string
-  default = "Whiskey"
+  default = "t2.micro"
 }
 
 variable "s3_logs_bucket_name" {
-  type    = string
-  default = "ofirgan-ops-bucket"
+  type = string
 }
 
 variable "s3_logs_folder" {
-  type    = string
-  default = "hw3"
+  type = string
+}
+
+
+variable "owner_tag" {
+  type = string
+}
+
+variable "purpose_tag" {
+  type = string
 }
