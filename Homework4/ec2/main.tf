@@ -18,7 +18,7 @@ data "terraform_remote_state" "vpc" {
 
 module "ec2" {
   source               = "app.terraform.io/OpsSchool-OfirGan/ec2/aws"
-  version              = "0.1.0-alpha"
+  version              = "1.0.0"
   vpc_id               = data.terraform_remote_state.vpc.outputs.vpc_id
   available_zone_names = data.terraform_remote_state.vpc.outputs.available_zone_names
   s3_logs_bucket_name  = var.s3_logs_bucket_name
