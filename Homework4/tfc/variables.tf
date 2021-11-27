@@ -10,6 +10,7 @@ variable "tfe_organization_name" {
 variable "tfe_vcs_provider_oauth_token_id" {
   description = "Terraform Cloud VCS Provider OAuth Token ID"
   type        = string
+  sensitive   = true
 }
 
 ##################################################################################
