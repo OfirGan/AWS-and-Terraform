@@ -28,7 +28,7 @@ module "ec2" {
   instance_count       = var.instance_count
   instance_type_web    = var.instance_type
   instance_type_db     = var.instance_type
-  key_name             = aws_ec2_key_pair_name
+  key_name             = var.aws_ec2_key_pair_name
   purpose_tag          = var.purpose_tag
   owner_tag            = var.owner_tag
 }

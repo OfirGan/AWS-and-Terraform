@@ -2,85 +2,76 @@
 # Organization
 ##################################################################################
 
-resource "tfe_organization" "organization" {
-  name  = var.tfe_organization_name
-  email = var.tfe_organization_email
+data "tfe_organization" "organization" {
+  name = var.tfe_organization_name
 }
 
 ##################################################################################
-# OAuth Token
+# Slack Notification
 ##################################################################################
 
-resource "tfe_oauth_client" "github_oauth_token" {
-  organization     = "my-org-name"
-  api_url          = "https://api.github.com"
-  http_url         = "https://github.com"
-  oauth_token      = var.vcs_personal_access_token
-  service_provider = "github"
+resource "tfe_notification_configuration" "slac_notification" {
+  count            = 2
+  name             = "Slac Notification"
+  enabled          = true
+  destination_type = "slack"
+  triggers         = var.notification_triggers
+  url              = var.slack_notification_webhook_url
+  workspace_id     = count.index == 0 ? resource.tfe_workspace.ec2_workspace.id : resource.tfe_workspace.vpc_workspace.id
+}
+
+
+##################################################################################
+# Global Workspace Environment Variables
+##################################################################################
+
+resource "tfe_variable" "aws_access_key_id" {
+  count        = 2
+  key          = "AWS_ACCESS_KEY_ID"
+  value        = var.aws_acess_key_id
+  category     = "env"
+  sensitive    = "true"
+  workspace_id = count.index == 0 ? resource.tfe_workspace.ec2_workspace.id : resource.tfe_workspace.vpc_workspace.id
+  description  = "AWS Connection"
+}
+
+resource "tfe_variable" "aws_secret_acess_key" {
+  count        = 2
+  key          = "AWS_SECRET_ACCESS_KEY "
+  value        = var.aws_secret_acess_key
+  category     = "env"
+  sensitive    = "true"
+  workspace_id = count.index == 0 ? resource.tfe_workspace.ec2_workspace.id : resource.tfe_workspace.vpc_workspace.id
+  description  = "AWS Connection"
+}
+
+resource "tfe_variable" "aws_default_region" {
+  count        = 2
+  key          = "AWS_DEFAULT_REGION"
+  value        = var.aws_default_region
+  description  = "AWS Default Region"
+  workspace_id = count.index == 0 ? resource.tfe_workspace.ec2_workspace.id : resource.tfe_workspace.vpc_workspace.id
+  category     = "env"
 }
 
 ##################################################################################
-# TFE Registry Module
+# Global Workspace Environment Variables
 ##################################################################################
 
-resource "tfe_registry_module" "vpc_tfe_module" {
-  vcs_repo {
-    display_identifier = "${var.vcs_organization_name}/${var.vpc_tfe_module_github_path}"
-    identifier         = "${var.vcs_organization_name}/${var.vpc_tfe_module_github_path}"
-    oauth_token_id     = resource.tfe_oauth_client.github_oauth_token.tfe_oauth_token_id
-  }
+resource "tfe_variable" "purpose_tag" {
+  count        = 2
+  key          = "purpose_tag"
+  value        = var.purpose_tag
+  description  = "Purpose Tag Name"
+  workspace_id = count.index == 0 ? resource.tfe_workspace.ec2_workspace.id : resource.tfe_workspace.vpc_workspace.id
+  category     = "terraform"
 }
-
-resource "tfe_registry_module" "ec2_tfe_module" {
-  vcs_repo {
-    display_identifier = "${var.vcs_organization_name}/${var.ec2_tfe_module_github_path}"
-    identifier         = "${var.vcs_organization_name}/${var.ec2_tfe_module_github_path}"
-    oauth_token_id     = resource.tfe_oauth_client.github_oauth_token.tfe_oauth_token_id
-  }
-}
-
-##################################################################################
-# Workspace
-##################################################################################
-
-module "vpc_tfe_module" {
-  source                    = "app.terraform.io/OpsSchool-OfirGan/vpc/tfe"
-  oauth_token_id            = resource.tfe_oauth_client.github_oauth_token.tfe_oauth_token_id
-  remote_state_consumer_ids = [module.ec2_tfe_module.workspace_id]
-  aws_acess_key_id          = var.aws_acess_key_id
-  aws_secret_acess_key      = var.aws_secret_acess_key
-  aws_default_region        = var.aws_default_region
-
-  vpc_cidr                 = var.vpc_cidr
-  availability_zones_count = var.availability_zones_count
-
-  purpose_tag = var.purpose_tag
-}
-
-module "ec2_tfe_module" {
-  source         = "app.terraform.io/OpsSchool-OfirGan/ec2/tfe"
-  oauth_token_id = resource.tfe_oauth_client.github_oauth_token.tfe_oauth_token_id
-
-  aws_acess_key_id     = var.aws_acess_key_id
-  aws_secret_acess_key = var.aws_secret_acess_key
-  aws_default_region   = var.aws_default_region
-
-  aws_ec2_key_pair_name = var.aws_ec2_key_pair_name
-  instance_count        = var.instance_count
-  instance_type         = var.instance_type
-  s3_logs_bucket_name   = var.s3_logs_bucket_name
-  s3_logs_folder        = var.s3_logs_folder
-
-  owner_tag   = var.owner_tag
-  purpose_tag = var.purpose_tag
-}
-
 
 ##################################################################################
 # Workspace Triggers
 ##################################################################################
 
 resource "tfe_run_trigger" "ec2_auto_run_after_vpc" {
-  workspace_id  = module.ec2_tfe_module.workspace_id
-  sourceable_id = module.vpc_tfe_module.workspace_id
+  workspace_id  = resource.tfe_workspace.ec2_workspace.id
+  sourceable_id = resource.tfe_workspace.vpc_workspace.id
 }

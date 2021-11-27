@@ -1,13 +1,13 @@
 # Prerequisites
 
 ## Terraform Cloud
-* Organization name
+* Organization Name (need to be created)
+* VCS Provider OAuth Token ID (need connect organization to github)
 
 ---
 
 ## GitHub
 * Organization Name
-* Personal Access Token
 * Workspaces:
     * Workspaces Repository Name
     * VPC Workspace - VCS Repo Workinkg Directory (/working/dir)
@@ -19,15 +19,17 @@
 ---
 
 ## AWS
-* AWS Acess Key 
-* AWS Secret Acess Key
+* AWS Acess Key (need to be created)
+* AWS Secret Acess Key (need to be created)
 * Region Name
+* Create EC2 Key Pair (need to be created)
 
 ---
 
 ## Slack
-*  slack notification webhook url
+*  slack notification webhook url (need to be created)
 
+---
 
 ## terraform.tfvars File
 create terraform.tfvars using this template:
@@ -35,19 +37,16 @@ create terraform.tfvars using this template:
 ##################################################################################
 # Terraform Cloud
 ##################################################################################
-tfe_organization_name = "<Terraform Cloud Organization Name>"
-tfe_organization_email = "XXXXX@gmail.com"
+tfe_organization_name           = "<Terraform Cloud Organization Name>"
+tfe_vcs_provider_oauth_token_id = "ot-XXXXXXXXXX"
 
 ##################################################################################
 # Github
 ##################################################################################
 vcs_organization_name        = "<Github UserName>"
-vcs_personal_access_token    = "XXXXXXXXXXXX"
 vcs_workspace_repo_name      = "<Workspace Repo Name>"
 vpc_workspace_repo_directory = "/working/dir"
 ec2_workspace_repo_directory = "/working/dir"
-vpc_tfe_module_github_path   = "terraform-tfe-vpc"
-ec2_tfe_module_github_path   = "terraform-tfe-ec2"
 vpc_aws_module_github_path   = "terraform-aws-vpc"
 ec2_aws_module_github_path   = "terraform-aws-ec2"
 
@@ -58,7 +57,7 @@ aws_acess_key_id     = "XXXXXX"
 aws_secret_acess_key = "XXXXXX"
 aws_default_region   = "us-east-1"
 
-owner_name  = "Owner"
+owner_tag  = "Owner"
 purpose_tag = "Purpose"
 
 ##################################################################################

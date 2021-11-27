@@ -7,8 +7,8 @@ variable "tfe_organization_name" {
   type        = string
 }
 
-variable "tfe_organization_email" {
-  description = "Terraform Cloud Organization Name"
+variable "tfe_vcs_provider_oauth_token_id" {
+  description = "Terraform Cloud VCS Provider OAuth Token ID"
   type        = string
 }
 
@@ -33,16 +33,6 @@ variable "vpc_workspace_repo_directory" {
 
 variable "ec2_workspace_repo_directory" {
   description = "EC2 Workspace - VCS Repo Workinkg Directory "
-  type        = string
-}
-
-variable "vpc_tfe_module_github_path" {
-  description = "github vpc-tfe module path path/to/module"
-  type        = string
-}
-
-variable "ec2_tfe_module_github_path" {
-  description = "github ec2-tfe module path path/to/module"
   type        = string
 }
 
@@ -77,6 +67,15 @@ variable "aws_default_region" {
   type        = string
 }
 
+variable "purpose_tag" {
+  description = "Purpose Tag Name"
+  type        = string
+}
+
+variable "owner_tag" {
+  type = string
+}
+
 ##################################################################################
 # AWS VPC
 ##################################################################################
@@ -89,11 +88,6 @@ variable "vpc_cidr" {
 variable "availability_zones_count" {
   description = "AZ Count to create subnets in"
   type        = number
-}
-
-variable "purpose_tag" {
-  description = "Purpose Tag Name"
-  type        = string
 }
 
 ##################################################################################
@@ -118,14 +112,6 @@ variable "s3_logs_bucket_name" {
 }
 
 variable "s3_logs_folder" {
-  type = string
-}
-
-variable "owner_tag" {
-  type = string
-}
-
-variable "purpose_tag" {
   type = string
 }
 
