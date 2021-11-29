@@ -10,9 +10,9 @@ data "tfe_organization" "organization" {
 # Slack Notification
 ##################################################################################
 
-resource "tfe_notification_configuration" "slac_notification" {
+resource "tfe_notification_configuration" "slack_notification" {
   count            = 2
-  name             = "Slac Notification"
+  name             = "Slack Notification"
   enabled          = true
   destination_type = "slack"
   triggers         = var.notification_triggers
@@ -37,7 +37,7 @@ resource "tfe_variable" "aws_access_key_id" {
 
 resource "tfe_variable" "aws_secret_acess_key" {
   count        = 2
-  key          = "AWS_SECRET_ACCESS_KEY "
+  key          = "AWS_SECRET_ACCESS_KEY"
   value        = var.aws_secret_acess_key
   category     = "env"
   sensitive    = "true"
